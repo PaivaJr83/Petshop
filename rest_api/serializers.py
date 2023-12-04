@@ -2,11 +2,14 @@ from rest_framework.serializers import (
   ModelSerializer, 
   HyperlinkedRelatedField, 
   PrimaryKeyRelatedField,
+  ValidationError
 )
+from django import forms
 
 
 from reserva.models import ReservaDeBanho, Petshop
 from base.models import Contato
+from datetime import date
 
 
 class PetshopModelSerializer(ModelSerializer):
@@ -36,6 +39,15 @@ class AgendamentoModelSerializer(ModelSerializer):
     queryset=Petshop.objects.all(),
     read_only=False
   )
+
+  def validate_diaDaReserva(self, value):
+    hoje = date.today()
+
+    if value < hoje:
+      raise ValidationError('Não é possível reservar para uma data no passado.')
+    
+    return value
+
 
   class Meta:
     model = ReservaDeBanho

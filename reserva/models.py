@@ -20,7 +20,7 @@ class ReservaDeBanho(models.Model):
   tamanho = models.IntegerField(verbose_name='Tamanho', choices=TAMANHO_OPCOES)
   petshop_id = models.ForeignKey(
     'Petshop',
-     related_name='ReservaDeBanho',
+     related_name='reservas',
      on_delete=models.CASCADE,
      blank=True,
      null=True,
@@ -31,6 +31,10 @@ class ReservaDeBanho(models.Model):
   class Meta:
     verbose_name = 'Formulário de Reserva de Banho'
     verbose_name_plural = 'Formulários de Reservas de Banhos'
+    ordering = ['id']
+
+  def __str__(self):
+    return f'Nome do Pet: {self.nomeDoPet} - Dia da Reserva: {self.diaDaReserva} - Turno: {self.turno}'
 
 
 class Petshop(models.Model):
@@ -39,8 +43,16 @@ class Petshop(models.Model):
   numero = models.CharField(verbose_name='Numero', max_length=10)
   bairro = models.CharField(verbose_name='Bairro', max_length=50)
 
+  class Meta:
+    ordering = ['id']
+
   def __str__(self):
     return f'Petshop : {self.nome}'
+  
+  
+  def qtd_reservas(self):
+    return self.reservas.count()
+
 
 
 

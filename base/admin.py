@@ -15,7 +15,6 @@ def marcar_como_nao_lido(modeladmin, request, queryset):
   modeladmin.message_user(request, 'Os formulários de contatos foram marcados como não lido!', messages.SUCCESS)
 
 
-# Register your models here.
 @admin.register(Contato)
 class ContatoAdmin(admin.ModelAdmin):
   list_display = ['nome', 'email', 'mensagem', 'data', 'lido']
